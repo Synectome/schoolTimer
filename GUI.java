@@ -11,12 +11,19 @@ public class GUI {
     private JLabel timeElapsed, timeGoal, dayOfWeek;
     private JPanel classPanel1, classPanel2;
     private Date currentTime; // stores the init time for a given running timer
-    private javax.swing.Timer timer1, timer2, timer3;
+    private javax.swing.Timer timer1, timer2;
 
     public GUI(){
         prepareGUI();
-        this.timer1 = new javax.swing.Timer(0, null);
-        this.timer2 = new javax.swing.Timer(0, null);
+
+        timer1 = new javax.swing.Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                currentTime = Calendar.getInstance().getTime();
+                statusLabel.setText(currentTime.toString());
+            }
+        });
+
+        this.timer2 = new javax.swing.Timer(1000, null);
     }
 
     public static void main(String[] args){
@@ -59,17 +66,17 @@ public class GUI {
     private void clockUnit(){
         // clock 1 
 
-        JButton okButton = new JButton("OK");
-        okButton.setActionCommand("OK");
-        okButton.addActionListener(new ButtonClickListener()); 
-        classPanel1.add(okButton);    
+        JButton startButton = new JButton("Start");
+        startButton.setActionCommand("Start");
+        startButton.addActionListener(new ButtonClickListener()); 
+        classPanel1.add(startButton);    
 
         // clock 2
  
-        JButton submitButton2 = new JButton("Submit");
-        submitButton2.setActionCommand("Submit");
-        submitButton2.addActionListener(new ButtonClickListener()); 
-        classPanel2.add(submitButton2);
+        JButton stopButton = new JButton("Stop");
+        stopButton.setActionCommand("Stop");
+        stopButton.addActionListener(new ButtonClickListener()); 
+        classPanel2.add(stopButton);
   
 
         mainFrame.setVisible(true);  
@@ -80,20 +87,16 @@ public class GUI {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();  
             
-            if( command.equals( "OK" ))  {
-                currentTime = this.timerInit();
-                statusLabel.setText("Ok Button clicked at :" + currentTime);
-            } else if( command.equals( "Submit" ) )  {
-                statusLabel.setText("Submit Button clicked. \n Reading ol time : " + currentTime); 
+            if( command.equals( "Start" ))  {
+            
+                timer1.start();
+            } else if( command.equals( "Stop" ) )  {
+
+                timer1.stop();
             } else {
                 statusLabel.setText("Cancel Button clicked.");
             }  	
         }	
-        
-        private Date timerInit(){
-        
-            return Calendar.getInstance().getTime();
-        }
 	
     }
 
